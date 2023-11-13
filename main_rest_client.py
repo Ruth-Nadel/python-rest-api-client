@@ -8,13 +8,9 @@ def main(url="https://resttest10.herokuapp.com"):
 
     # Step 1: Receive JSON by making two API calls
     json_response_1 = api_client.get_json(1)
-    print("JSON Response for Serial=1:")
-    print(json.dumps(json_response_1, indent=2))
-    print("\n")
+    print("JSON Response for Serial=1:", json.dumps(json_response_1, indent=2, end="\n\n"))
     json_response_2 = api_client.get_json(2)
-    print("JSON Response for Serial=2:")
-    print(json.dumps(json_response_2, indent=2))
-    print("\n")
+    print("JSON Response for Serial=2:", json.dumps(json_response_2, indent=2, end="\n\n"))
 
     # Step 2: Process JSON
     processed_data = api_client.process_json(json_response_1, json_response_2)
