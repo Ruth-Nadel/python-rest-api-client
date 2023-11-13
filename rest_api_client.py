@@ -2,6 +2,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+
 class RESTAPIClient:
     def __init__(self, base_url):
         self._base_url = base_url
@@ -31,14 +32,12 @@ class RESTAPIClient:
             return response.json()
         except requests.exceptions.RetryError as retry_err:
             if "503 error responses" in str(retry_err):
-                print(f"Too many 503 errors occurred while fetching JSON for serial {serial}")
+                raise Exception(f"Error | Too many 503 errors occurred while fetching JSON for serial {serial}")
                 # Handle the situation with too many 503 errors as needed
             else:
-                print(f"Retry error occurred while fetching JSON for serial {serial}: {str(retry_err)}")
-                raise  # Re-raise the exception for non-503 errors
+                raise Exception(f"Error | Retry error occurred while fetching JSON for serial {serial}: {str(retry_err)}")
         except requests.exceptions.RequestException as e:
-            print(f"An error occurred while fetching JSON for serial {serial}: {str(e)}")
-            raise  # Re-raise the exception to propagate it to the calling code
+            raise Exception(f"Error | while fetching JSON for serial {serial}: {str(e)}")
 
     def process_json(self, json_response_1, json_response_2):
         try:
@@ -65,7 +64,7 @@ class RESTAPIClient:
             }
             return processed_data
         except Exception as e:
-            raise Exception(f"Error processing JSON: {str(e)}")
+            raise Exception(f"Error | while processing JSON: {str(e)}")
 
     def send_processed_json(self, processed_data):
         try:
@@ -73,4 +72,5 @@ class RESTAPIClient:
             response.raise_for_status()
             return response
         except requests.exceptions.RequestException as e:
-            raise Exception(f"Error sending processed JSON: {str(e)}")
+            raise Exception(f"Error | while sending processed JSON: {str(e)}")
+            
