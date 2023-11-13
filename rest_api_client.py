@@ -12,17 +12,26 @@ class RESTAPIClient:
     def base_url(self):
         return self._base_url
 
+    @base_url.setter
+    def base_url(self, value):
+        self._base_url = value
+
     @property
     def session(self):
         return self._session
 
-    def _create_session(self):
+    @session.setter
+    def session(self, value):
+        self._session = value
+
+    @staticmethod
+    def _create_session():
         session = requests.Session()
         adapter = requests.adapters.HTTPAdapter(
             max_retries=Retry(total=3, backoff_factor=1, status_forcelist=[500, 502, 503, 504]))
         session.mount("http://", adapter)
         session.mount("https://", adapter)
-        session.timeout = (3, 30)  # Set a longer timeout (connect timeout, read timeout)
+        session.timeout = (2, 20)
         return session
 
     def get_json(self, serial):
@@ -35,11 +44,12 @@ class RESTAPIClient:
                 raise Exception(f"Error | Too many 503 errors occurred while fetching JSON for serial {serial}")
                 # Handle the situation with too many 503 errors as needed
             else:
-                raise Exception(f"Error | Retry error occurred while fetching JSON for serial {serial}: {str(retry_err)}")
+                raise Exception(f"Error | occurred while fetching JSON for serial {serial}: {str(retry_err)}")
         except requests.exceptions.RequestException as e:
-            raise Exception(f"Error | while fetching JSON for serial {serial}: {str(e)}")
+            raise Exception(f"Error | occurred while fetching JSON for serial {serial}: {str(e)}")
 
-    def process_json(self, json_response_1, json_response_2):
+    @staticmethod
+    def process_json(json_response_1, json_response_2):
         try:
             processed_data = {
                 "serial": 3,
@@ -64,7 +74,7 @@ class RESTAPIClient:
             }
             return processed_data
         except Exception as e:
-            raise Exception(f"Error | while processing JSON: {str(e)}")
+            raise Exception(f"Error | occurred while processing JSON: {str(e)}")
 
     def send_processed_json(self, processed_data):
         try:
@@ -72,5 +82,4 @@ class RESTAPIClient:
             response.raise_for_status()
             return response
         except requests.exceptions.RequestException as e:
-            raise Exception(f"Error | while sending processed JSON: {str(e)}")
-            
+            raise Exception(f"Error | occurred while sending processed JSON: {str(e)}")
