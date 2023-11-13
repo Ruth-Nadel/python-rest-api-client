@@ -25,19 +25,29 @@ pip install requests json urllib3
 
 ## Usage
 
-1. Open the `rest_client.py` file.
+1. Open the `main_rest_client.py` file.
 2. Modify the `base_url` variable with the appropriate REST server address.
 3. Run the script:
 
 ```bash
-python rest_client.py
+python main_rest_client.py
 ```
 
 The script will make two API calls, process the JSON responses, and send a processed JSON to the server.
 
 ## Configuration
 
-You can customize the script by adjusting the `base_url` variable and other parameters in the `rest_client.py` file.
+You can customize the script by adjusting the `base_url` variable and other parameters in the `main_rest_client.py` file.
+
+## Running Unit Tests
+
+To run unit tests, execute the following command:
+
+```bash
+python -m unittest test_rest_api_client.py
+```
+
+This will run the unit tests for the REST API client and ensure that the functionality is working as expected.
 
 ## Contributing
 
